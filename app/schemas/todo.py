@@ -1,12 +1,13 @@
 from pydantic import BaseModel
 from typing import Optional
+import uuid
 
 class TodoCreate(BaseModel):
     title: str
     task: str
 
 class TodoOut(BaseModel):
-    id: int
+    id: uuid.UUID
     title: str
     task: Optional[str]
 

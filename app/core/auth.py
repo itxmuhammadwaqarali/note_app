@@ -21,6 +21,11 @@ def verify_password(plain, hashed):
 
 def create_access_token(data: dict):
     to_encode = data.copy()
+    # Convert any UUID objects to strings for JSON serialization
+    for key, value in to_encode.items():
+        if hasattr(value, '__class__') and value.__class__.__name__ == 'UUID':
+            to_encode[key] = str(value)
+    
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
