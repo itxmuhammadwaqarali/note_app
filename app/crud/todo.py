@@ -2,8 +2,14 @@ from sqlalchemy.orm import Session
 from app.models.todo import Todo, PriorityEnum
 import uuid
 
-def create_todo(db, title, task, owner_id, priority=PriorityEnum.medium):
-    todo = Todo(title=title, task=task, owner_id=owner_id, priority=priority)
+def create_todo(db, title, task, owner_id, priority=PriorityEnum.medium, due_date=None):
+    todo = Todo(
+        title=title,
+        task=task,
+        owner_id=owner_id,
+        priority=priority,
+        due_date=due_date
+    )
     db.add(todo)
     db.commit()
     db.refresh(todo)
