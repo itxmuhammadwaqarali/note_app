@@ -10,6 +10,7 @@ class TodoOut(BaseModel):
     id: uuid.UUID
     title: str
     task: Optional[str]
+    completed: bool
 
     class Config:
         from_attributes = True

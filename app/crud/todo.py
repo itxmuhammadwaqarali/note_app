@@ -30,3 +30,18 @@ def delete_todo(db: Session, todo_id: uuid.UUID, user_id: uuid.UUID):
     db.delete(todo)
     db.commit()
     return True
+
+def toggle_todo(db, todo_id, user_id):
+    todo = db.query(Todo).filter(
+        Todo.id == todo_id,
+        Todo.owner_id == user_id
+    ).first()
+
+    if not todo:
+        return None
+
+    todo.completed = not todo.completed
+    db.commit()
+    db.refresh(todo)
+
+    return todo

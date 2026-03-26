@@ -62,3 +62,22 @@ def delete_todo_api(todo_id: str, db: Session = Depends(get_db), current_user=De
     if not deleted:
         raise HTTPException(status_code=404, detail="Todo not found")
     return {"ok": True}
+
+
+@router.patch("/todos/{todo_id}/toggle", response_model=TodoOut)
+def toggle_todo_api(
+    todo_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    try:
+        todo_uuid = uuid.UUID(todo_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid todo id")
+
+    updated = crud_todo.toggle_todo(db, todo_uuid, current_user.id)
+
+    if not updated:
+        raise HTTPException(status_code=404, detail="Todo not found")
+
+    return updated
